@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0 maximum-scale=1.0"/>
+    <!-- ICON -->
+    <link rel="icon" href="./assets/favicon.ico" sizes="32x32" type="image/vnd.microsoft.icon">
+    <!-- TITLE -->
+    <title class="application-title"></title>
+    <!-- META -->
+    <!--<meta property="og:title" content="">-->
+    <!--<meta property="og:description" content="">-->
+    <!--<meta property="og:url" content="https://geoxc-apps.bd.esri.com/.../index.html">-->
+    <!--<meta property="og:image" content="https://geoxc-apps.bd.esri.com/.../assets/app.png">-->
+    
+    <!-- CHARTJS -- https://www.chartjs.org/ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    
+    <!-- CALCITE -->
+    <script type="module" src="https://js.arcgis.com/calcite-components/1.2.0/calcite.esm.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/1.2.0/calcite.css"/>
+    
+    <!-- ArcGIS API for JavaScript-->
+    <link href="https://js.arcgis.com/4.26/@arcgis/core/assets/esri/themes/dark/main.css" rel="stylesheet"/>
+    <script src="https://js.arcgis.com/4.26/"></script>
+    
+    <!-- APPLICATION -->
+    <link rel="stylesheet" type="text/css" href="./css/application.css">
+    <script type="module" src="./js/Application.js"></script>
+  </head>
+  <body class="calcite-mode-dark">
+    <calcite-shell>
+      
+      <header class="content-row" slot="header">
+        <h2 class="content-row">
+          <calcite-icon class="application-icon" icon="tour" scale="l"></calcite-icon>
+          <span class="application-title"></span>
+        </h2>
+        <calcite-action-bar layout="horizontal" expand-disabled="true">
+          <div id="sign-in-container"></div>
+          <calcite-action id="app-share-action" appearance="transparent" scale="m" title="share current options..." text="share current options" icon="link" hidden></calcite-action>
+          <calcite-action id="app-details-action" appearance="transparent" scale="m" title="app details..." text="app details" icon="information"></calcite-action>
+        </calcite-action-bar>
+      </header>
+      
+      <!-- LEFT -->
+      <calcite-shell-panel slot="panel-start" position="start" width-scale="m" collapsed="false">
+        <calcite-panel id="totals-panel" headingx="Totals along the journey" descriptionx="within watershed boundaries">
+          
+          <calcite-block heading="Overview" open>
+            <calcite-icon slot="icon" icon="map"></calcite-icon>
+            <!--<calcite-action id="camera-path-action" slot="control" icon="freehand"></calcite-action>-->
+            <div id="overview-container"></div>
+            <table id="details-table">
+              <tbody>
+              <tr>
+                <td>Distance Direct</td>
+                <td id="distance-straight-label" class="details-label"></td>
+                <td class="details-units">miles</td>
+              </tr>
+              <tr>
+                <td>Distance Traveled</td>
+                <td id="distance-traveled-label" class="details-label"></td>
+                <td class="details-units">miles</td>
+              </tr>
+              <tr>
+                <td>Elevation Change</td>
+                <td id="elevation-change-label" class="details-label"></td>
+                <td class="details-units">feet</td>
+              </tr>
+              </tbody>
+            </table>
+          </calcite-block>
+          
+          <calcite-block id="watersheds-block" heading="Watershed" description="USGS Hydrologic Unit (HUC10)" open>
+            <calcite-icon slot="icon" icon="freehand-area"></calcite-icon>
+            <div id="watershed-feature-container" class="feature-container"></div>
+          </calcite-block>
+          
+          <calcite-block id="flowlines-block" heading="Flowline" description="National Hydrography Database Plus v2.1" open>
+            <calcite-icon slot="icon" icon="freehand"></calcite-icon>
+            <div id="river-feature-container" class="feature-container"></div>
+          </calcite-block>
+        
+        </calcite-panel>
+      </calcite-shell-panel>
+      
+      <!-- CENTER -->
+      <div id="center-container">
+        <div id="view-container"></div>
+        <div id="charts-container">
+          <div class="chart-container">
+            <canvas id="total-population-chart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="total-businesses-chart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="total-farms-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <!-- STATUS NOTICE -->
+      <calcite-notice id="status-notice" kind="brand" icon="utility-network-trace" width="auto">
+        <div slot="title">Trace Downstream Analysis</div>
+        <div slot="message">Click on the map to calculate a new waterdrop's journey</div>
+        <calcite-action class="status-loop-btn" title="loop" slot="actions-end" icon="refresh" scale="m" disabled></calcite-action>
+        <calcite-action class="status-reset-btn" title="reset / go to start" slot="actions-end" icon="beginning-f" scale="m" disabled></calcite-action>
+        <calcite-action class="status-play-btn" title="play / pause" slot="actions-end" icon="play-f" scale="l" disabled></calcite-action>
+        <calcite-action class="status-clear-btn" title="clear results" slot="actions-end" icon="trash" scale="m" disabled></calcite-action>
+      </calcite-notice>
+      
+      <!-- SHAREABLE ALERT -->
+      <calcite-alert id="app-share-alert" slot="alerts" kind="success" icon="launch" placement="bottom" auto-close auto-close-duration="medium">
+        <div slot="message">Shareable link has been copied to the clipboard.</div>
+        <calcite-link slot="link" href="#" target="_blank" role="link" title="open in new tab">open in new tab</calcite-link>
+      </calcite-alert>
+      
+      <!-- NOTICES ADN ALERTS -->
+      <calcite-alert id="app-notice" slot="alerts" kind="danger" placement="bottom" width="auto">
+        <div slot="title"></div>
+        <div slot="message"></div>
+      </calcite-alert>
+      
+      <!-- APP DETAILS MODAL -->
+      <calcite-modal id="app-details-modal" slot="modals" kind="brand" scale="m" width="m" aria-labelledby="app-modal-title">
+        <h3 slot="header" id="app-modal-title" class="application-title"></h3>
+        <div slot="content">
+          <calcite-label>
+            <div>Follow the waterdrop’s downstream journey:</div>
+            <ul>
+              <li>
+                Show key demographics for the watershed the current river segment is in.
+              </li>
+              <li>
+                Show the sum total of key demographics since the water drop’s journey began.
+              </li>
+              <li>
+                How many people, farms, and businesses did it pass within its path?
+              </li>
+            </ul>
+          </calcite-label>
+          <calcite-label>
+            <div>ArcGIS Living Atlas</div>
+            <ul>
+              <li>
+                <calcite-link href="https://livingatlas.arcgis.com/en/browse/?q=%22National%20Hydrography%20Dataset%20Plus%22#d=3&q=%22National%20Hydrography%20Dataset%20Plus%22" target="_blank">NHD 2.1 content in Living Atlas</calcite-link>
+              </li>
+              <li>
+                <calcite-link href="https://livingatlas.arcgis.com/en/browse/?q=huc10#d=3&q=HUC10" target="_blank">HUC10 in Living Atlas</calcite-link>
+              </li>
+            </ul>
+          </calcite-label>
+          <calcite-label>
+            <div>Analysis Service</div>
+            <ul>
+              <li>
+                <span>Learn more about the ArcGIS Online ready-to-use</span>
+                <calcite-link href="https://developers.arcgis.com/rest/elevation/api-reference/trace-downstream.htm" target="_blank">Trace Downstream</calcite-link>
+                <span>hydrology analysis service.</span>
+              </li>
+              <li>
+                NOTE: this analysis requires an active ArcGIS Online user account, but does <em>NOT</em> consumes credits.
+              </li>
+            </ul>
+          </calcite-label>
+        </div>
+        <div slot="secondary">
+          <calcite-label layout="inline">
+            <span>hide on startup</span>
+            <calcite-checkbox id="hide-startup-checkbox"></calcite-checkbox>
+          </calcite-label>
+        </div>
+        <calcite-button id="app-details-ok-btn" slot="primary" width="full" hidden>OK</calcite-button>
+      </calcite-modal>
+    
+    </calcite-shell>
+    
+    <!-- LOADER -->
+    <calcite-loader id="app-loader" type="indeterminate" scale="l" text="...loading..."></calcite-loader>
+  
+  </body>
+</html>

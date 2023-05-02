@@ -1,0 +1,230 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Calcite Theme Editor: https://esrips.github.io/calcite-theme-editor/ */
+
+.calcite-mode-light,
+.calcite-mode-dark {
+  color-scheme: dark;
+  --calcite-mode-name: dark;
+  --calcite-ui-brand: #F9A845;
+  --calcite-ui-brand-hover: #E78207;
+  --calcite-ui-brand-press: #C16D06;
+  --calcite-ui-text-1: #F7DCBA;
+  --calcite-ui-text-2: #FFFFFF;
+  --calcite-ui-text-3: #FFFFFF;
+  --calcite-ui-text-highlight: #F9A845;
+  --calcite-ui-text-inverse: #000000;
+  --calcite-ui-text-link: #E78207;
+  --calcite-link-blue-underline: rgba(249, 168, 69, 0.5);
+  --calcite-ui-background: #022638;
+  --calcite-ui-foreground-1: #011926;
+  --calcite-ui-foreground-2: #01131C;
+  --calcite-ui-foreground-3: #000B11;
+  --calcite-ui-inverse: #FEE6D9;
+  --calcite-ui-inverse-hover: #FCAA7D;
+  --calcite-ui-inverse-press: #F96D21;
+  --calcite-ui-border-1: #011926;
+  --calcite-ui-border-2: #011C2A;
+  --calcite-ui-border-3: #011E2E;
+  --calcite-ui-border-input: #012131;
+  --calcite-ui-icon-color: currentColor;
+  --calcite-ui-info: #E78207;
+  --calcite-ui-success: #36DA43;
+  --calcite-ui-warning: #FFC900;
+  --calcite-ui-danger: #FE583E;
+  --calcite-ui-danger-hover: #FF0015;
+  --calcite-ui-danger-press: #D90012;
+}
+
+.esri-widget,
+.esri-widget__heading,
+.esri-menu,
+.esri-popup__main-container,
+.esri-popup__header-container--button:hover,
+.esri-popup__pointer-direction {
+  color: var(--calcite-ui-text-2) !important;
+  background-color: var(--calcite-ui-foreground-1) !important;
+}
+
+.esri-button,
+.esri-input,
+.esri-popup__button,
+.esri-widget--button,
+.esri-layer-list__item {
+  color: var(--calcite-ui-icon-color) !important;
+  background-color: var(--calcite-ui-foreground-1) !important;
+}
+
+.esri-layer-list__item {
+  border-color: var(--calcite-ui-border-2);
+  background-color: transparent !important;
+}
+
+.esri-legend {
+  width: unset !important;
+}
+
+header[slot="header"] {
+  padding: 0 0.5rem 0 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--calcite-ui-brand);
+}
+
+header calcite-action-bar {
+  align-items: center;
+}
+
+.application-title {
+  color: var(--calcite-ui-brand);
+}
+
+.application-icon {
+  margin-right: 0.5rem;
+}
+
+calcite-loader#app-loader {
+  --calcite-loader-size: 8rem;
+  align-self: center;
+  justify-self: center;
+}
+
+
+calcite-modal {
+  --calcite-modal-content-background: var(--calcite-ui-background);
+}
+
+calcite-modal [slot="secondary"] calcite-label {
+  --calcite-label-margin-bottom: 0;
+}
+
+.content-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+
+.content-static {
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.content-fill {
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+#center-container {
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#view-container {
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#overview-container {
+  pointer-events: none;
+  height: 190px;
+}
+
+#status-notice {
+  --calcite-notice-width: 700px;
+}
+
+#details-table {
+  margin-top: 10px;
+  width: 100%;
+}
+
+#details-table td {
+  padding: 2px;
+}
+
+.details-label {
+  text-align: right;
+  color: var(--calcite-ui-brand);
+  font-size: 13pt;
+  font-weight: 600;
+}
+
+.details-units {
+  width: 45px;
+  vertical-align: bottom;
+}
+
+#charts-container {
+  height: 160px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.chart-container {
+  flex-basis: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 10px;
+  display: flex;
+}
+
+.chart-container canvas {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.chart-container canvas:not(:first-of-type) {
+  margin-top: 5px;
+}
+
+
+.feature-container {
+  height: 120px;
+}
+
+.esri-feature-content table:first-of-type {
+  width: 100%;
+}

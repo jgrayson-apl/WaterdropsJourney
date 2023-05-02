@@ -1,0 +1,259 @@
+const nearbySymbol = (this.view.type === '3d')
+? {
+  type: "polygon-3d",
+  symbolLayers: [
+    {
+      type: "line",
+      size: 5.5,
+      material: {color: this._white_a},
+      pattern: {type: "style", style: "dash"}
+    },
+    {
+      type: "object",
+      width: 125,
+      anchor: 'relative',
+      anchorPosition: {x: 0.0, y: 0.0, z: -1.0},
+      resource: {primitive: "sphere"},
+      material: {color: this._blue}
+    },
+    {
+      type: "object",
+      width: 250,
+      anchor: 'bottom',
+      resource: {primitive: "sphere"},
+      material: {color: this._white_a}
+    }
+  ]
+}
+: {
+  type: "simple-fill",
+  color: 'transparent',
+  outline: null
+};
+
+this.nearbyGraphic = new Graphic({symbol: nearbySymbol});
+this.nearbyGraphic.geometry = (location != null) ? geometryEngine.geodesicBuffer(location, this.nearbyDistanceMiles, 'miles', true) : null;
+
+
+
+// COORDINATES ALONG SOURCE POLYLINE //
+/*const alongCoords = denseFollowPolyline.paths[0];
+ return alongCoords.reduce((params, coords, coordsIdx) => {
+ if (coordsIdx < (alongCoords.length - 1)) {
+
+ // NEXT TARGET //
+ let target = new Point({spatialReference: denseFollowPolyline.spatialReference, x: coords[0], y: coords[1]});
+ //target = this.view.groundView.elevationSampler.queryElevation(target);
+
+ const {coordinate, vertexIndex} = geometryEngine.nearestVertex(followAlongPolyline, target);
+ const nextPoint = followAlongPolyline.getPoint(0, Math.min(lastFollowVertexIndex, (vertexIndex + this.pointIdxOffset)));
+
+ const startDD = new Point({x: coordinate.longitude, y: coordinate.latitude, spatialReference: {wkid: 4326}});
+ const endDD = new Point({x: nextPoint.longitude, y: nextPoint.latitude, spatialReference: {wkid: 4326}});
+ const {azimuth} = geodesicUtils.geodesicDistance(startDD, endDD, "meters");
+
+ // POSITION BEHIND CURRENT LOCATION //
+ let xyOffset = this.positionXYOffset;
+ let behindPositionDD = geodesicUtils.pointFromDistance(startDD, -xyOffset, azimuth);
+
+ /!*if (coordsIdx > 0) {
+ const prevPositionDD = params[coordsIdx - 1].camera.position;
+ const {distance} = geodesicUtils.geodesicDistance(prevPositionDD, behindPositionDD, "meters");
+ xyOffset -= distance;
+ }*!/
+
+ //behindPositionDD = geodesicUtils.pointFromDistance(startDD, -xyOffset, azimuth);
+ behindPositionDD.z = this.view.groundView.elevationSampler.queryElevation(behindPositionDD).z + this.positionZOffset;
+
+ // NEXT PARAMS //
+ params.push({
+ target: target.clone(),
+ camera: {
+ heading: azimuth,
+ tilt: this.positionTilt,
+ position: behindPositionDD
+ }
+ });
+ }
+
+ return params;
+ }, []);*/
+
+/**
+ *
+ * @param view
+ */
+/*initializeWatershedBoundary({view}) {
+  require([
+    'esri/core/reactiveUtils',
+    'esri/core/promiseUtils',
+    'esri/widgets/Feature'
+  ], (reactiveUtils, promiseUtils, Feature) => {
+
+    // WATERSHED BOUNDARY LAYER //
+    const watershedsLayer = view.map.allLayers.find(layer => layer.title === "Watershed Boundary Features");
+    watershedsLayer.load().then(() => {
+      watershedsLayer.set({
+        outFields: ["*"],
+        popupEnabled: false
+      });
+
+      const huc10sFeature = new Feature({container: 'watershed-feature-container'});
+
+      const allHUC10sByOID = new Map();
+
+      const updateNearbyWatershed = ({location}) => {
+        if (location) {
+          view.hitTest(view.toScreen(location), {include: [watershedsLayer]}).then(hitTestResponse => {
+            if (hitTestResponse.results.length) {
+              const huc10Feature = hitTestResponse.results[0].graphic;
+              const huc10FeatureOID = huc10Feature.getObjectId();
+
+              if (!huc10sFeature.graphic || (huc10sFeature.graphic.getObjectId() !== huc10FeatureOID)) {
+
+                huc10sFeature.graphic = huc10Feature;
+                this.dispatchEvent(new CustomEvent('watershed-change', {detail: {featureOID: huc10FeatureOID}}));
+
+                const huc10Attributes = {
+                  ...huc10Feature.attributes,
+                  previouslyCounted: allHUC10sByOID.has(huc10FeatureOID)
+                };
+
+                this.updateCharts(huc10Attributes);
+
+                allHUC10sByOID.set(huc10FeatureOID, huc10Feature);
+              }
+            }
+          });
+        } else { huc10sFeature.graphic = null; }
+      };
+
+      this.addEventListener("source-change", ({detail: {}}) => {
+        allHUC10sByOID.clear();
+        huc10sFeature.graphic = null;
+      });
+
+      this.addEventListener('trace-result-reset', ({detail: {}}) => {
+        allHUC10sByOID.clear();
+        huc10sFeature.graphic = null;
+      });
+
+      this.addEventListener('trace-result-clear', ({detail: {}}) => {
+        allHUC10sByOID.clear();
+        huc10sFeature.graphic = null;
+      });
+
+      this.addEventListener('target-change', ({detail: {location, waitForUpdate}}) => {
+
+        updateNearbyWatershed({location});
+
+        /!*if (waitForUpdate) {
+         reactiveUtils.once(() => !watershedsLayerView.updating).then(() => {
+         updateNearbyWatershed({location});
+         }, {initial: true});
+         } else {
+         updateNearbyWatershed({location});
+         }*!/
+      });
+
+    });
+  });
+
+}*/
+
+/**
+ *
+ * @param view
+ */
+/*initializeFlowlines({view}) {
+  require([
+    'esri/core/reactiveUtils',
+    'esri/core/promiseUtils',
+    'esri/widgets/Feature'
+  ], (reactiveUtils, promiseUtils, Feature) => {
+
+    // FLOWLINES LAYER //
+    const flowlinesLayer = view.map.allLayers.find(layer => { return (layer.title === "Flowlines"); });
+    flowlinesLayer.load().then(() => {
+      flowlinesLayer.set({outFields: ["*"]});
+
+      const flowlinesFeature = new Feature({container: 'river-feature-container'});
+
+      const updateNearbyFlowline = ({location}) => {
+        if (location) {
+          view.hitTest(view.toScreen(location), {include: [flowlinesLayer]}).then(hitTestResponse => {
+            if (hitTestResponse.results.length) {
+              const flowlineFeature = hitTestResponse.results[0].graphic;
+              if (!flowlinesFeature.graphic || (flowlinesFeature.graphic.getObjectId() !== flowlineFeature.getObjectId())) {
+                flowlinesFeature.graphic = flowlineFeature;
+              }
+            }
+          });
+        } else { flowlinesFeature.graphic = null; }
+      };
+
+      this.addEventListener("source-change", ({detail: {}}) => {
+        flowlinesFeature.graphic = null;
+      });
+
+      this.addEventListener('trace-result-reset', ({detail: {}}) => {
+        flowlinesFeature.graphic = null;
+      });
+
+      this.addEventListener('trace-result-clear', ({detail: {}}) => {
+        flowlinesFeature.graphic = null;
+      });
+
+      this.addEventListener('target-change', ({detail: {location, waitForUpdate}}) => {
+
+        updateNearbyFlowline({location});
+
+        /!*if (waitForUpdate) {
+         reactiveUtils.once(() => !flowlinesLayerView.updating).then(() => {
+         updateNearbyFlowline({location});
+         }, {initial: true});
+         } else {
+         updateNearbyFlowline({location});
+         }*!/
+
+      });
+
+    });
+  });
+}*/
+
+require(["esri/widgets/ElevationProfile"], (ElevationProfile) => {
+
+      const profileContainer = document.createElement('div')
+      profileContainer.classList.add('profile-container');
+      view.ui.add(profileContainer);
+
+      const elevationProfile = new ElevationProfile({
+        container: profileContainer,
+        view,
+        visible: false,
+        profiles: [
+          {
+            type: "input",
+            color: "#F9A845",
+            title: "Elevations along Downstream Trace",
+            viewVisualizationEnabled: true
+          }
+        ],
+        visibleElements: {
+          chart: true,
+          legend: false,
+          clearButton: false,
+          settingsButton: false,
+          sketchButton: false,
+          selectButton: false,
+          uniformChartScalingToggle: false
+        }
+      });
+      // view.ui.add(elevationProfile);
+      // this.followAlong.addEventListener('nearby-intersect-change', ({detail: {nearbyIntersect}}) => {
+      //   elevationProfile.input = {geometry: nearbyIntersect};
+      // });
+
+      elevationProfile.input = {geometry: _traceResultFeature.geometry.clone()};
+                elevationProfile.visible = (elevationProfile.input?.geometry != null);

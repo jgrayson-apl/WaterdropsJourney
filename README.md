@@ -1,4 +1,4 @@
-# Application Template
+# Waterdrop’s Journey
 Simple application template that uses the ArcGIS API for JavaScript and Calcite Components.
 
  - [ArcGIS API for Javascript](https://developers.arcgis.com/javascript/latest/api-reference/)

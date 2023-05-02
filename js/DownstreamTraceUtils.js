@@ -207,9 +207,8 @@ class DownstreamTraceUtils extends EventTarget {
    */
   startTrace({location}) {
     require([
-      "esri/core/watchUtils",
       "esri/rest/geoprocessor"
-    ], (watchUtils, geoprocessor) => {
+    ], (geoprocessor) => {
 
       this.clearResults();
 

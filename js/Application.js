@@ -248,7 +248,7 @@ class Application extends AppBase {
     ], (reactiveUtils, promiseUtils, Feature) => {
 
       // VISUALLY OFFSET NHD LAYERS //
-      const nhdLayer = view.map.layers.find(l => l.title === 'NHD Plus Version 2.1');
+      const nhdLayer = view.map.layers.find(l => l.title === 'National Hydrological Dataset');
       nhdLayer.loadAll().then(() => {
         nhdLayer.layers.forEach(subLayer => {
           subLayer.elevationInfo = {mode: 'relative-to-ground', offset: 5.0};

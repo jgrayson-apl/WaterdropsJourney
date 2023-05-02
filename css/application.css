@@ -222,7 +222,7 @@ calcite-modal [slot="secondary"] calcite-label {
 
 
 .feature-container {
-  height: 120px;
+  min-height: 120px;
 }
 
 .esri-feature-content table:first-of-type {

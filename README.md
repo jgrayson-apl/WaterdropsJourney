@@ -6,11 +6,11 @@ Follow the waterdrop’s downstream journey:
 * How many people, farms, and businesses did it pass within its path?
 
 #### ArcGIS Living Atlas
-* NHD 2.1 content in Living Atlas
-* HUC10 in Living Atlas
+* [NHD 2.1 content in Living Atlas](https://livingatlas.arcgis.com/en/browse/?q=%22National%20Hydrography%20Dataset%20Plus%22#d=3&q=%22National+Hydrography+Dataset+Plus%22)
+* [HUC10 in Living Atlas](https://livingatlas.arcgis.com/en/browse/?q=HUC10#d=3&q=HUC10)
 
 #### Analysis Service
-* Learn more about the ArcGIS Online ready-to-use Trace Downstream hydrology analysis service.
+* Learn more about the ArcGIS Online ready-to-use [Trace Downstream](https://developers.arcgis.com/rest/elevation/api-reference/trace-downstream.htm) hydrology analysis service.
 * NOTE: this analysis requires an active ArcGIS Online user account, but does NOT consumes credits.
 
 ### Technologies Used

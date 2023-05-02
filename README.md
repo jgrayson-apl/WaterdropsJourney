@@ -1,10 +1,22 @@
 # Waterdrop’s Journey
-Simple application template that uses the ArcGIS API for JavaScript and Calcite Components.
+
+Follow the waterdrop’s downstream journey:
+* Show key demographics for the watershed the current river segment is in.
+* Show the sum total of key demographics since the water drop’s journey began.
+* How many people, farms, and businesses did it pass within its path?
+
+#### ArcGIS Living Atlas
+* NHD 2.1 content in Living Atlas
+* HUC10 in Living Atlas
+
+#### Analysis Service
+* Learn more about the ArcGIS Online ready-to-use Trace Downstream hydrology analysis service.
+* NOTE: this analysis requires an active ArcGIS Online user account, but does NOT consumes credits.
+
+### Technologies Used
 
  - [ArcGIS API for Javascript](https://developers.arcgis.com/javascript/latest/api-reference/)
  - [Calcite Components](https://developers.arcgis.com/calcite-design-system/components/)
-
-*WARNING*: this is a new and evolving effort... things might not work as expected.
 
 
 ### Deploy

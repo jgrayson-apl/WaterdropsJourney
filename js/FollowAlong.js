@@ -14,6 +14,8 @@
  limitations under the License.
  */
 
+import ViewLoading from './apl/ViewLoading.js';
+
 /**
  *
  * FollowAlong
@@ -124,6 +126,9 @@ class FollowAlong extends EventTarget {
     this.loop = false;
     this.initialViewpoint = view.viewpoint.clone();
 
+    this.viewLoading = new ViewLoading({view: this.view, enabled: false});
+    this.view.ui.add(this.viewLoading, 'bottom-right');
+
     this.initializeFollowParams();
 
     this._followAlong = this._followAlong.bind(this);
@@ -182,11 +187,13 @@ class FollowAlong extends EventTarget {
       if (this.following && this._updateFollowParamIndex()) {
 
         if (this._followAlongIndex % this.playbackPauseIntervalSteps === 0) {
+          this.viewLoading.enabled = true;
           this.view.focus();
           reactiveUtils.once(() => !this.view.updating).then(() => {
+            this.viewLoading.enabled = false;
             this._goToFollowLocation();
             requestAnimationFrame(this._followAlong);
-          });
+          }, {initial: false});
         } else {
           this._goToFollowLocation();
           requestAnimationFrame(this._followAlong);

@@ -42,14 +42,23 @@ class ViewLoading extends HTMLElement {
   /**
    * @type {boolean}
    */
-  enabled;
+  #enabled;
+
+  /**
+   *
+   * @param {boolean} value
+   */
+  set enabled(value) {
+    this.#enabled = value;
+    this.loader?.toggleAttribute('hidden', !this.view?.updating);
+  }
 
   constructor({container, view, enabled = true}) {
     super();
 
     this.container = (container instanceof HTMLElement) ? container : document.getElementById(container);
     this.view = view;
-    this.enabled = enabled;
+    this.#enabled = enabled;
 
     const shadowRoot = this.attachShadow({mode: 'open'});
     shadowRoot.innerHTML = `
@@ -75,9 +84,10 @@ class ViewLoading extends HTMLElement {
   connectedCallback() {
     require(['esri/core/reactiveUtils'], (reactiveUtils) => {
       this.view.when(() => {
-        const loader = this.shadowRoot.querySelector('calcite-loader');
+        this.loader = this.shadowRoot.querySelector('calcite-loader');
+        this.loader.toggleAttribute('hidden', !this.#enabled);
         reactiveUtils.watch(() => this.view.updating, (updating) => {
-          this.enabled && loader.toggleAttribute('hidden', !updating);
+          this.#enabled && this.loader.toggleAttribute('hidden', !updating);
         });
       });
     });
